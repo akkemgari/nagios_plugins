@@ -45,9 +45,13 @@ nsca_conf ="/usr/local/etc/nagios/send_nsca_cmk.conf"
 # +----------------------------------------------------------------------+
 def get_status(user,host,ipt_cmd):
 	connect="ssh -i keys/id_dsa "
-	cmd=connect+user+"@"+host+ipt_cmd
+	cmd=connect+user+"@"+host+" "+ipt_cmd
 	status, output = commands.getstatusoutput(cmd)
-	return output
+        if status!=0:
+		print output
+		exit(1)
+	else:
+		return output
 # +----------------------------------------------------------------------+
 
 def process_status(output):
@@ -139,21 +143,21 @@ def send_to_nsca(host,status,service):
 	cmd='echo "'+ status+'" |send_nsca -H '+nsca_host+' -c '+nsca_conf
 	status, output = commands.getstatusoutput(cmd)
 	if status == 0:
-                print "Successfully sent data to Nagios Server"
-                exit (0)
+                print "Successfully sent detail of %s to Nagios Server for host %s" % (service,host)
         else:
                 print "There seems to be some error in sending status to Nagios server"
-		exit (1)
+	return status
 
 # +----------------------------------------------------------------------+
 def main ():
         parser = argparse.ArgumentParser(description="Queries the livestatus for Build information")
 
-        parser.add_argument("-H", "--host", help="host name to search for", required='True')
+        parser.add_argument("-H", "--host", help="IronPort hosts.You Can provide multiple hosts.", required='True',nargs='+')
         args = parser.parse_args()
-	output=get_status("zenoss",args.host,"status detail")
-	status=get_domain_details(output)
- 	send_to_nsca(args.host,status,"Ironport Status")	
+	for host in args.host:
+		output=get_status("zenoss",host,"status detail")
+		status=get_domain_details(output)
+ 		send_to_nsca(host,status,"Ironport Status")	
 	
 # +----------------------------------------------------------------------+
 
