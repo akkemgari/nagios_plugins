@@ -1,0 +1,5 @@
+*.mk
+*.bak
+*.pyc
+id_dsa
+id_dsa.pub
