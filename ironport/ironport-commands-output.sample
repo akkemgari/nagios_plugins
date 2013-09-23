@@ -1,0 +1,136 @@
+>status detail
+Status as of:                  Mon Sep 23 10:18:29 2013 GMT
+Up since:                      Tue Sep 10 00:24:26 2013 GMT (13d 9h 54m 3s)
+Last counter reset:            Never
+System status:                 Online
+Oldest Message:                6 hours 59 mins 22 secs
+Feature - Bounce Verification: Perpetual
+Feature - Delivery:            Perpetual
+Feature - Incoming Mail Handling: Perpetual
+Feature - Sophos Anti-Virus:   30 days
+Feature - McAfee:              30 days
+
+Counters:                               Reset          Uptime        Lifetime
+  Receiving
+    Messages Received           3,918,615,197      42,941,294   3,918,615,197
+    Recipients Received         3,918,636,053      42,941,481   3,918,636,053
+    Gen. Bounce Recipients                  0               0               0
+  Rejection
+    Rejected Recipients             1,615,657          36,579       1,615,657
+    Dropped Messages                        0               0               0
+  Queue
+    Soft Bounced Events           207,062,035       4,787,298     207,062,035
+  Completion
+    Completed Recipients        3,918,630,753      42,943,414   3,918,630,753
+      Hard Bounced Recipients     378,279,373       5,531,971     378,279,373
+        DNS Hard Bounces           15,330,145         200,496      15,330,145
+        5XX Hard Bounces          329,283,444       4,942,130     329,283,444
+        Expired Hard Bounces       33,665,784         389,345      33,665,784
+        Filter Hard Bounces                 0               0               0
+        Other Hard Bounces                  0               0               0
+      Delivered Recipients      3,531,874,693      37,328,426   3,531,874,693
+      Deleted Recipients            8,476,687          83,017       8,476,687
+        Global Unsub. Hits          8,309,676          83,017       8,309,676
+    DomainKeys Signed Msgs                  0               0               0
+  Current IDs
+    Message ID (MID)                                               1772748073
+    Injection Conn. ID (ICID)                                        43809666
+    Delivery Conn. ID (DCID)                                        794799690
+
+Rates (Events Per Hour):             1-Minute       5-Minutes      15-Minutes
+  Receiving
+    Messages Received                  52,544          88,975          57,081
+    Recipients Received                52,543          88,975          57,081
+  Queue
+    Soft Bounced Events                 2,594           8,678           4,959
+  Completion
+    Completed Recipients               51,117          85,708          55,486
+      Hard Bounced Recipients           3,481           7,256           5,303
+      Delivered Recipients             47,575          78,270          50,076
+
+Gauges:                               Current
+  System
+    RAM Utilization                        7%
+    CPU Utilization
+      Total                                7%
+      MGA                                  6%
+      Anti-Spam                            0%
+      Anti-Virus                           0%
+      Reporting                            0%
+      Quarantine                           0%
+    Disk I/O Utilization                   0%
+    Resource Conservation                   0
+    Logging Disk Usage                    11%
+    Logging Disk Available               177G
+  Connections
+    Current Inbound Conn.                  26
+    Current Outbound Conn.                 40
+  Queue
+    Active Recipients                   5,291
+      Unattempted Recipients            4,406
+      Attempted Recipients                885
+    Messages In Work Queue                  0
+    Messages In Quarantine                  0
+    Destinations In Memory             23,260
+    Kilobytes Used                     61,956
+      Kilobytes In Quarantine               0
+    Kilobytes Free                 34,541,052
+
+----------------------------------------------------------------------------------------------------------------------------
+>tophosts rcpts_sent
+Status as of:                   Mon Sep 23 13:23:51 2013 GMT
+Hosts marked with '*' were down as of the last delivery attempt.
+
+                                 Active  Conn.     Deliv.       Soft
+Hard
+#   Recipient Host               Recip.    Out     Recip.    Bounced
+Bounced
+
+1   gmail.com                       251      8 13,526,585  1,510,892
+841,872
+2   hotmail.com                      36      4  9,264,257          6
+1,381,081
+3   yahoo.com                       210     22  5,637,627    419,438
+997,195
+4   aol.com                           3      2    775,039      2,480
+120,710
+5   yahoo.com.br                      1      0    517,354     20,293
+53,817
+
+
+6   yahoo.es                          4      3    350,680      4,794
+50,171
+7   hotmail.es                        0      1    344,066          1
+77,429
+8   msn.com                           1      1    310,719          2
+31,361
+9   live.com                          0      1    288,546          0
+61,039
+10  comcast.net                       3      3    201,173          4
+44,773
+
+
+11  outlook.com                       0      1    192,072          0
+5,006
+12  ymail.com                         3      2    172,525      4,661
+51,159
+13  sbcglobal.net                     3      1    170,239      5,626
+8,607
+14  vu.edu.pk                         0      0    169,785         32
+131,066
+15  yahoo.co.uk                       1      0    163,003      1,445
+12,922
+
+
+16  yahoo.com.ar                      7      0    148,386      5,893
+10,946
+17  ig.com.br                         0      1    128,363         72
+8,101
+18  yahoo.com.mx                      9      2    114,778      2,141
+7,853
+19  bol.com.br                      819      1    108,276  1,021,772
+12,593
+20  mail.ru                           0      0    108,171     35,618
+35,204
+
+
