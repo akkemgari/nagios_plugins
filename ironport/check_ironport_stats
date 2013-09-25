@@ -38,11 +38,12 @@
 from __future__ import division
 import sys,re,argparse,commands
 
+# +----------------------------------------------------------------------+
+# Globals
 nsca_host= "monitor.ningops.com"
 nsca_conf ="/usr/local/etc/nagios/send_nsca_cmk.conf"
 nagios_service="Ironport Status"
-domainq_threshold=1000
-threshold={'ActiveRecipients': '90000', 'domain': '1000'}
+threshold={'ActiveRecipients': '90000', 'domain': '90000','HardBouncePercent' : '90'}
 
 # +----------------------------------------------------------------------+
 def get_status(user,host,ipt_cmd):
@@ -83,7 +84,6 @@ def process_status(output):
                 m = re.match(r'([\S*\s*]*) (\d+) \s+ (\d+) \s+ (\d+)',line)
                 if m == None:
                     continue
-                stats_line = stats_line + "%s=%s " % (m.group(1).replace(' ',''), m.group(3))
 		stats_q[m.group(1).replace(' ','')]=m.group(3)
                 if m.group(1).replace(' ','') == 'DeliveredRecipients':
                     DeliveredRecipients = m.group(3)
@@ -94,22 +94,18 @@ def process_status(output):
                 if m == None:
                     continue
                 if m.group(1).strip() in Gauges:
-                    stats_line = stats_line + "%s=%s " % (m.group(1).replace(' ',''), m.group(2))
 		    stats_q[m.group(1).replace(' ','')]=m.group(2)
 
         if (DeliveredRecipients > 2000):
-            stats_line = stats_line + "HardBouncePercent=%d" % (int(HardBouncedRecipients) / int(DeliveredRecipients) * 100)
 	    stats_q["HardBouncePercent"]=int(HardBouncedRecipients) / int(DeliveredRecipients) * 100
         else:
             # If volume is this low, the site is likely in maint mode, which would trigger a false alarm on hard bounce rate
-            stats_line = stats_line + "HardBouncePercent=0%"
 	    stats_q["HardBouncePercent"]="0"
         
     except Exception,error:
         print >>sys.stderr, "ERROR: %s"%error
         return 1
     return stats_q
-    #return stats_line
 # +----------------------------------------------------------------------+
 def get_domain_details(output):
     domain_q = {}
@@ -162,9 +158,11 @@ def generate_status(Queue):
                         #status_line=status_line+key+":"+str(Queue[key])+ " "
                         status=int(status) ^ 0
         if status==0:
-                status_line="IronPort Status Ok:"+status_line
+                status_line="IronPort Status Ok "+status_line
         else:
                 status_line="IronPort Status Critical:"+status_line
+	for i in ('ActiveRecipients','HardBouncePercent'):
+		status_line=status_line+"|"+i+"="+str(Queue[i])
 
         return status,status_line
 
@@ -183,6 +181,7 @@ def main ():
 		ironport_q.update(process_status(output))
 		status,status_line=generate_status(ironport_q)
 		print status_line
+		#print ironport_q
  		#send_to_nsca(host,nagios_service,status,status_line)	
 # +----------------------------------------------------------------------+
 
