@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/python
 # +----------------------------------------------------------------------+
 # |                                                                      |
 # |       _                      _   __  __                              |
@@ -31,7 +31,10 @@
 #   Script  : check_ironport_stats                                                      
 #   Notes   : check_ironport_stats will use to gete the status of IronPort
 #  	    : This script connects to the Ironport and issues the command `status detail` and ` tophosts rcpts_sent` and then parses the
-#	      Output and sends the details to Nagios Server using send_nsca
+#	      Output and to check the following parameters.
+#['ActiveRecipients', 'CompletedRecipients', 'MessagesReceived', 'SoftBouncedEvents', 'DeliveredRecipients', 'LoggingDiskUsage', 'HardBouncePercent', 'HardBouncedRecipients', 'KilobytesFree', 'DiskIOUtilization', 'RAMUtilization', 'CPUUtilization', 'CurrentOutboundConn', 'RecipientsReceived'] from the output of `status detail` command. You can define the threshold of all these parameters in the Global Dictinary names threshold.
+
+# It also get the domain and their queue from command `tophosts rcpts_sent` , for setting threshold on the domain queue , Add the item named `domain` in the threshold dict.
 #                                                                       
 # +----------------------------------------------------------------------+
 
@@ -60,7 +63,7 @@ def get_status(user,host,ipt_cmd):
 def process_status(output):
     stats_line = ";IronPort Status;"
     stats_q ={}
-    Gauges = ['RAM Utilization', 'Total', 'Disk IO Utilization', 'Logging Disk Usage', 
+    Gauges = ['RAM Utilization', 'CPU Utilization', 'Disk IO Utilization', 'Logging Disk Usage', 
             'Current Outbound Conn', 'Active Recipients', 'Kilobytes Free']
 
     try:
@@ -71,6 +74,7 @@ def process_status(output):
             line = line.replace('%','')
             line = line.replace('/','')
             line = line.replace('.','')
+            line = line.replace('Total','CPU Utilization')
             items = line.split()
             if len(items) < 2:
                 continue 
@@ -149,7 +153,7 @@ def generate_status(Queue):
                 key1=re.sub(pat,"domain",key)
                 if key1 in threshold:
                         if int(Queue[key])> int(threshold[key1]):
-                                status=1
+                                status=2
                                 status_line=status_line+key+":"+str(Queue[key])+ " "
                         else:
                                 status=int(status) ^ 0
@@ -161,8 +165,9 @@ def generate_status(Queue):
                 status_line="IronPort Status Ok "+status_line
         else:
                 status_line="IronPort Status Critical:"+status_line
+	status_line=status_line+"|"
 	for i in ('ActiveRecipients','HardBouncePercent'):
-		status_line=status_line+"|"+i+"="+str(Queue[i])
+		status_line=status_line+" "+i+"="+str(Queue[i])
 
         return status,status_line
 
@@ -175,13 +180,14 @@ def main ():
         parser.add_argument("-H", "--host", help="IronPort hosts.You Can provide multiple hosts.", required='True',nargs='+')
         args = parser.parse_args()
 	for host in args.host:
+		ironport_q={}
 		output=get_status("zenoss",host,"tophosts rcpts_sent")
 		ironport_q=get_domain_details(output)
-		output=get_status("zenoss",host,"status detail")
+		output=get_status("zenoss",host,"status detail")	
 		ironport_q.update(process_status(output))
 		status,status_line=generate_status(ironport_q)
 		print status_line
-		#print ironport_q
+		exit(status)
  		#send_to_nsca(host,nagios_service,status,status_line)	
 # +----------------------------------------------------------------------+
 
