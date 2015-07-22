@@ -198,7 +198,7 @@ if ($response->is_success) {
   while (($i < @webcontentarr) && ((!defined($CpuUsage)))) {
     #<dt>CPU Usage: u5603.93 s143.83 cu0 cs0 - 14% CPU load</dt>
     if ($webcontentarr[$i] =~ /CPU Usage:\s+u\d+.\d+\s+s\d+.\d+\s+cu0\s+cs0\s+-\s+(\d+.\d+)%\s+CPU\s+load/) {
-      ($CpuUsage) = ($webcontentarr[$i] =~ /CPU Usage:\s+u\d+.\d+\s+s\d+.\d+\s+cu0\s+cs0\s+-\s+(\d+.\d+)%\s+CPU\s+load/);
+      ($CpuUsage) = ($webcontentarr[$i] =~ /CPU Usage:\s+u\d+.\d+\s+s\d+.\d+\s+cu0\s+cs0\s+-\s+(\d*.\d*)%\s+CPU\s+load/);
     }
     $i++;
   }
